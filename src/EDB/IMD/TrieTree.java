@@ -13,7 +13,7 @@ public class TrieTree {
 
         for(int i = 1; i < wordToInsert.length(); i++) {
             if(i + 1 == wordToInsert.length()) {
-                insertingWord = insertingWord.addChildren(new TrieNode(wordToInsert.charAt(i), false));
+                insertingWord = insertingWord.addChildren(new TrieNode(wordToInsert.charAt(i), true));
             } else {
                 insertingWord = insertingWord.addChildren(new TrieNode(wordToInsert.charAt(i), false));
             }
