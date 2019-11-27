@@ -19,4 +19,30 @@ public class TrieTree {
             }
         }
     }
+
+    private TrieNode searchPrefix(String wordToSearch) {
+        TrieNode searchingWord = treeRoot;
+
+        for (int i = 0; i < wordToSearch.length() && searchingWord != null; i++) {
+            searchingWord = searchingWord.checkIfHasChild(wordToSearch.charAt(i));
+        }
+
+        return searchingWord;
+    }
+
+    public boolean search(String wordToSearch) {
+        return searchPrefix(wordToSearch).getText().equals(wordToSearch);
+    }
+
+    public void autoComplete(String wordPrefix, int wordsQuantities) {
+        TrieNode firstPrefixNode = searchPrefix(wordPrefix);
+
+        if(firstPrefixNode == null || firstPrefixNode.howManyChildren() == 0) {
+            return;
+        }
+
+        for (int i = 0; i < wordsQuantities; i++) {
+            //TODO
+        }
+    }
 }

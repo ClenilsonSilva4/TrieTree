@@ -6,17 +6,39 @@ public class TrieNode {
     private boolean isWord;
     private ArrayList <TrieNode> children;
     private String text;
-    private char nodeChar;
+    private TrieNode parent;
+    private char nodeLetter;
 
     public TrieNode() {
-        this.isWord = false;
-        this.children = new ArrayList<>();
+        isWord = false;
+        children = new ArrayList<>();
+        parent = null;
     }
 
-    public TrieNode(char nodeChar, boolean isWord) {
+    public TrieNode(char nodeLetter, boolean isWord) {
         this();
-        this.nodeChar = nodeChar;
+        this.nodeLetter = nodeLetter;
         this.isWord = isWord;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public boolean isWord() {
+        return isWord;
+    }
+
+    public char getNodeLetter() {
+        return nodeLetter;
+    }
+
+    private void setParent(TrieNode trieNode) {
+        parent = trieNode;
+    }
+
+    public TrieNode getParent() {
+        return parent;
     }
 
     public TrieNode addChildren(TrieNode newChild) {
@@ -24,16 +46,40 @@ public class TrieNode {
             children.get(children.indexOf(newChild)).addChildren(newChild);
         } else {
             children.add(newChild);
+            newChild.setParent(this);
+
+            if(newChild.isWord()) {
+                newChild.assembleWord();
+            }
         }
 
         return newChild;
     }
 
-    public boolean isWord() {
-        return isWord;
+    private void assembleWord() {
+        StringBuilder wordToAssemble = new StringBuilder(String.valueOf(nodeLetter));
+        TrieNode gettingParentsLetter = parent;
+
+        while(gettingParentsLetter.getNodeLetter() != 0) {
+            wordToAssemble.append(gettingParentsLetter.getNodeLetter());
+            gettingParentsLetter = gettingParentsLetter.getParent();
+        }
+
+        wordToAssemble.reverse();
+        text = wordToAssemble.toString();
     }
 
-    public char getNodeChar() {
-        return nodeChar;
+    public int howManyChildren() {
+        return children.size();
+    }
+
+    public TrieNode checkIfHasChild(char nodeChar) {
+        for (TrieNode child : children) {
+            if (child.getNodeLetter() == nodeChar) {
+                return child;
+            }
+        }
+
+        return null;
     }
 }

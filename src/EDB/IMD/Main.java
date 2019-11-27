@@ -6,5 +6,7 @@ public class Main {
         TrieTree teste = new TrieTree();
 
         teste.insertWord("Teste");
+
+        System.out.println(teste.search("Teste"));
     }
 }
