@@ -1,4 +1,4 @@
-package EDB.IMD;
+package edb.imd;
 
 import java.util.ArrayList;
 
@@ -42,8 +42,8 @@ public class TrieNode {
     }
 
     public TrieNode addChildren(TrieNode newChild) {
-        if(children.contains(newChild)) {
-            children.get(children.indexOf(newChild)).addChildren(newChild);
+        if(checkIfHasChild(newChild.getNodeLetter()) != null) {
+            return checkIfHasChild(newChild.getNodeLetter());
         } else {
             children.add(newChild);
             newChild.setParent(this);
@@ -51,9 +51,8 @@ public class TrieNode {
             if(newChild.isWord()) {
                 newChild.assembleWord();
             }
+            return newChild;
         }
-
-        return newChild;
     }
 
     private void assembleWord() {
@@ -69,17 +68,26 @@ public class TrieNode {
         text = wordToAssemble.toString();
     }
 
-    public int howManyChildren() {
-        return children.size();
-    }
-
     public TrieNode checkIfHasChild(char nodeChar) {
-        for (TrieNode child : children) {
-            if (child.getNodeLetter() == nodeChar) {
+        for(TrieNode child : children) {
+            if(child.getNodeLetter() == nodeChar) {
                 return child;
             }
         }
 
         return null;
+    }
+
+    public int getWord(int wordsQuantities, ArrayList<String> wordsList) {
+        if(isWord()) {
+            wordsList.add(this.text);
+            wordsQuantities--;
+        }
+
+        for (int i = 0; i < children.size() && wordsQuantities > 0; i++) {
+            wordsQuantities = children.get(i).getWord(wordsQuantities, wordsList);
+        }
+
+        return wordsQuantities;
     }
 }
