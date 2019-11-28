@@ -50,8 +50,12 @@ public class TrieNode {
     }
 
     public TrieNode addChildren(TrieNode newChild) {
-        if(checkIfHasChild(newChild.getNodeLetter()) != null) {
-            return checkIfHasChild(newChild.getNodeLetter());
+        if (checkIfHasChild(newChild.getNodeLetter()) != null) {
+            TrieNode hasChild = checkIfHasChild(newChild.getNodeLetter());
+            if(newChild.isWord()){
+                hasChild.isWord = true;
+            }
+            return hasChild;
         } else {
             children.add(newChild);
             newChild.setParent(this);

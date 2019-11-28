@@ -1,25 +1,39 @@
 package edb.imd;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import java.util.ArrayList;
 
 public class TrieTree {
     private TrieNode treeRoot;
+    @FXML private TextField wordPrefix;
+    @FXML private TextArea wordsSuggestions;
+    private int wordsAdded;
 
     public TrieTree() {
+        wordsSuggestions = new TextArea();
         this.treeRoot = new TrieNode();
+        wordPrefix = new TextField();
+        wordsAdded = 0;
     }
 
     public void insertWord(String wordToInsert) {
         TrieNode insertingWord = treeRoot;
         wordToInsert = wordToInsert.toLowerCase();
-
-        for(int i = 0; i < wordToInsert.length(); i++) {
-            if(i + 1 == wordToInsert.length()) {
-                insertingWord = insertingWord.addChildren(new TrieNode(wordToInsert.charAt(i), true));
-            } else {
-                insertingWord = insertingWord.addChildren(new TrieNode(wordToInsert.charAt(i), false));
+        if(!search(wordToInsert)) {
+            for(int i = 0; i < wordToInsert.length(); i++) {
+                if(i + 1 == wordToInsert.length()) {
+                    insertingWord = insertingWord.addChildren(new TrieNode(wordToInsert.charAt(i), true));
+                } else {
+                    insertingWord = insertingWord.addChildren(new TrieNode(wordToInsert.charAt(i), false));
+                }
             }
+
+            wordsAdded++;
         }
+
     }
 
     private TrieNode searchPrefix(String wordToSearch) {
@@ -33,24 +47,23 @@ public class TrieTree {
         return searchingWord;
     }
 
-    public void search(String wordToSearch) {
+    public boolean search(String wordToSearch) {
         wordToSearch = wordToSearch.toLowerCase();
         TrieNode searchWord = searchPrefix(wordToSearch);
 
-        if(searchWord != null && searchWord.getText().equals(wordToSearch)) {
-            System.out.println("A Palavra Foi Encontrada");
-        } else {
-            System.out.println("A Palavra Não Foi Encontrada");
-        }
+        return (searchWord != null && searchWord.getText().equals(wordToSearch));
     }
 
-    public void autoComplete(String wordPrefix, int wordsQuantities) {
+    public void autoComplete(String wordPrefix) {
+        autoComplete(wordPrefix, wordsAdded);
+    }
+
+    public ArrayList<String> autoComplete(String wordPrefix, int wordsQuantities) {
         wordPrefix = wordPrefix.toLowerCase();
         TrieNode autoCompleteNode = searchPrefix(wordPrefix);
 
         if(autoCompleteNode == null) {
-            System.out.println("Não Foram Encontradas Palavras Cadastradas com o Prefixo");
-            return;
+            return null;
         }
 
         ArrayList<String> wordsSuggestions = new ArrayList<>();
@@ -71,17 +84,16 @@ public class TrieTree {
         }
 
         if(suggestionsList.size() != 1) {
-            System.out.print("Sugestões: ");
             for(String wordFound : suggestionsList) {
                 if(!wordFound.equals(wordPrefix)) {
                     System.out.println(wordFound);
-                    System.out.print("\t\t   ");
                 }
             }
         } else if(!suggestionsList.contains(wordPrefix)) {
-            System.out.print("Sugestão: ");
             System.out.println(suggestionsList.get(0));
         }
+
+        return suggestionsList;
     }
 
     public void deleteWord(String wordToDelete) {
@@ -102,6 +114,16 @@ public class TrieTree {
             deleteWord.removeChild(deleteWord.checkIfHasChild(wordToDelete.charAt(index)));
         } else if(deleteWord.isWord()) {
             deleteWord.setIsWord(false);
+        }
+    }
+
+    public void KeyPressed(KeyEvent keyEvent) {
+        wordsSuggestions.setText("");
+        ArrayList<String> wordsSuggestionsList = autoComplete(wordPrefix.getText(), wordsAdded);
+        if(wordsSuggestionsList != null) {
+            for(String wordToSuggest : wordsSuggestionsList) {
+                wordsSuggestions.appendText(wordToSuggest + "\n");
+            }
         }
     }
 }

@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="350.0" maxWidth="500.0" minHeight="350.0" minWidth="500.0" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edb.imd.InterfaceController">
+<Pane maxHeight="350.0" maxWidth="500.0" minHeight="350.0" minWidth="500.0" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edb.imd.TrieTree">
    <children>
       <AnchorPane layoutY="70.0" prefHeight="280.0" prefWidth="500.0" style="-fx-background-color: #e0ffff;">
          <children>
-            <TextField layoutX="25.0" layoutY="131.0" prefHeight="26.0" prefWidth="200.0" />
+            <TextField fx:id="wordPrefix" layoutX="25.0" layoutY="131.0" onKeyPressed="#KeyPressed" prefHeight="26.0" prefWidth="200.0" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="25.0" layoutY="93.0" prefHeight="40.0" prefWidth="200.0" text="Insira o Prefixo da Palavra&#10;Para Buscar Sugestões:" textAlignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
             <AnchorPane layoutX="249.0" prefHeight="280.0" prefWidth="4.0" style="-fx-background-color: #008b8b;" />
-            <ListView layoutX="275.0" layoutY="20.0" prefHeight="240.0" prefWidth="200.0" />
+            <TextArea fx:id="wordsSuggestions" layoutX="275.0" layoutY="20.0" prefHeight="240.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="70.0" prefWidth="500.0" style="-fx-background-color: #008b8b;" />
