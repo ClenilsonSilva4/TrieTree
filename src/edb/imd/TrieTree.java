@@ -24,6 +24,7 @@ public class TrieTree {
 
     private TrieNode searchPrefix(String wordToSearch) {
         TrieNode searchingWord = treeRoot;
+        wordToSearch = wordToSearch.toLowerCase();
 
         for(int i = 0; i < wordToSearch.length() && searchingWord != null; i++) {
             searchingWord = searchingWord.checkIfHasChild(wordToSearch.charAt(i));
@@ -84,6 +85,23 @@ public class TrieTree {
     }
 
     public void deleteWord(String wordToDelete) {
+        TrieNode deleteWord = searchPrefix(wordToDelete);
 
+        if(deleteWord == null || wordToDelete.length() == 0) {
+            return;
+        }
+
+        if(deleteWord.getChildrenQuantity() == 0 && deleteWord.isWord()) {
+            int index = wordToDelete.length();
+
+            while(deleteWord.getChildrenQuantity() < 2) {
+                deleteWord = deleteWord.getParent();
+                index--;
+            }
+
+            deleteWord.removeChild(deleteWord.checkIfHasChild(wordToDelete.charAt(index)));
+        } else if(deleteWord.isWord()) {
+            deleteWord.setIsWord(false);
+        }
     }
 }

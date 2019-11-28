@@ -21,12 +21,20 @@ public class TrieNode {
         this.isWord = isWord;
     }
 
+    public void removeChild(TrieNode childToRemove) {
+        children.remove(childToRemove);
+    }
+
     public String getText() {
         return text;
     }
 
     public boolean isWord() {
         return isWord;
+    }
+
+    public void setIsWord(boolean word) {
+        isWord = word;
     }
 
     public char getNodeLetter() {
@@ -89,5 +97,9 @@ public class TrieNode {
         }
 
         return wordsQuantities;
+    }
+
+    public int getChildrenQuantity() {
+        return children.size();
     }
 }

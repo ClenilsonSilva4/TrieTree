@@ -11,5 +11,7 @@ public class Main {
         teste.insertWord("Testado");
 
         teste.autoComplete("Test", 4);
+
+        teste.deleteWord("Teste");
     }
 }
