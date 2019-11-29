@@ -35,6 +35,9 @@ public class TrieNode {
 
     public void setIsWord(boolean word) {
         isWord = word;
+        if(word) {
+            assembleWord();
+        }
     }
 
     public char getNodeLetter() {
@@ -53,7 +56,7 @@ public class TrieNode {
         if (checkIfHasChild(newChild.getNodeLetter()) != null) {
             TrieNode hasChild = checkIfHasChild(newChild.getNodeLetter());
             if(newChild.isWord()){
-                hasChild.isWord = true;
+                hasChild.setIsWord(true);
             }
             return hasChild;
         } else {

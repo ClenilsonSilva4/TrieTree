@@ -8,14 +8,10 @@ import java.util.ArrayList;
 
 public class TrieTree {
     private TrieNode treeRoot;
-    @FXML private TextField wordPrefix;
-    @FXML private TextArea wordsSuggestions;
     private int wordsAdded;
 
     public TrieTree() {
-        wordsSuggestions = new TextArea();
         this.treeRoot = new TrieNode();
-        wordPrefix = new TextField();
         wordsAdded = 0;
     }
 
@@ -33,7 +29,6 @@ public class TrieTree {
 
             wordsAdded++;
         }
-
     }
 
     private TrieNode searchPrefix(String wordToSearch) {
@@ -51,19 +46,23 @@ public class TrieTree {
         wordToSearch = wordToSearch.toLowerCase();
         TrieNode searchWord = searchPrefix(wordToSearch);
 
-        return (searchWord != null && searchWord.getText().equals(wordToSearch));
+        if(searchWord == null || searchWord.getText() == null) {
+            return false;
+        }
+
+        return searchWord.getText().equals(wordToSearch);
     }
 
     public void autoComplete(String wordPrefix) {
         autoComplete(wordPrefix, wordsAdded);
     }
 
-    public ArrayList<String> autoComplete(String wordPrefix, int wordsQuantities) {
+    public void autoComplete(String wordPrefix, int wordsQuantities) {
         wordPrefix = wordPrefix.toLowerCase();
         TrieNode autoCompleteNode = searchPrefix(wordPrefix);
 
         if(autoCompleteNode == null) {
-            return null;
+            return;
         }
 
         ArrayList<String> wordsSuggestions = new ArrayList<>();
@@ -92,8 +91,6 @@ public class TrieTree {
         } else if(!suggestionsList.contains(wordPrefix)) {
             System.out.println(suggestionsList.get(0));
         }
-
-        return suggestionsList;
     }
 
     public void deleteWord(String wordToDelete) {
@@ -114,16 +111,6 @@ public class TrieTree {
             deleteWord.removeChild(deleteWord.checkIfHasChild(wordToDelete.charAt(index)));
         } else if(deleteWord.isWord()) {
             deleteWord.setIsWord(false);
-        }
-    }
-
-    public void KeyPressed(KeyEvent keyEvent) {
-        wordsSuggestions.setText("");
-        ArrayList<String> wordsSuggestionsList = autoComplete(wordPrefix.getText(), wordsAdded);
-        if(wordsSuggestionsList != null) {
-            for(String wordToSuggest : wordsSuggestionsList) {
-                wordsSuggestions.appendText(wordToSuggest + "\n");
-            }
         }
     }
 }
