@@ -1,9 +1,16 @@
 package edb.imd;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+
 import java.util.ArrayList;
 
 public class TrieTree {
     private TrieNode treeRoot;
+    @FXML private TextField wordPrefix;
+    @FXML private TextArea wordsSuggestions;
     private int wordsAdded;
 
     public TrieTree() {
@@ -53,12 +60,12 @@ public class TrieTree {
         autoComplete(wordPrefix, wordsAdded);
     }
 
-    public void autoComplete(String wordPrefix, int wordsQuantities) {
+    public ArrayList<String> autoComplete(String wordPrefix, int wordsQuantities) {
         wordPrefix = wordPrefix.toLowerCase();
         TrieNode autoCompleteNode = searchPrefix(wordPrefix);
 
         if(autoCompleteNode == null) {
-            return;
+            return null;
         }
 
         ArrayList<String> wordsSuggestions = new ArrayList<>();
@@ -78,15 +85,7 @@ public class TrieTree {
             wordsSuggestions.remove(index);
         }
 
-        if(suggestionsList.size() != 1) {
-            for(String wordFound : suggestionsList) {
-                if(!wordFound.equals(wordPrefix)) {
-                    System.out.println(wordFound);
-                }
-            }
-        } else if(!suggestionsList.contains(wordPrefix)) {
-            System.out.println(suggestionsList.get(0));
-        }
+        return suggestionsList;
     }
 
     public void deleteWord(String wordToDelete) {
@@ -107,6 +106,16 @@ public class TrieTree {
             deleteWord.removeChild(deleteWord.checkIfHasChild(wordToDelete.charAt(index)));
         } else if(deleteWord.isWord()) {
             deleteWord.setIsWord(false);
+        }
+    }
+
+    public void KeyPressed(ActionEvent keyEvent) {
+        wordsSuggestions.setText("");
+        ArrayList<String> wordsSuggestionsList = autoComplete(wordPrefix.getText(), wordsAdded);
+        if(wordsSuggestionsList != null) {
+            for(String wordToSuggest : wordsSuggestionsList) {
+                wordsSuggestions.appendText(wordToSuggest + "\n");
+            }
         }
     }
 }
